@@ -1,4 +1,4 @@
-#!/Users/jamesfitzsimons/Developer/FitzPrints/fpenv/bin/python3.11
+#!/Users/jamesfitzsimons/Developer/FitzPrints/fpenv/bin/python
 # -*- coding: utf-8 -*-
 import re
 import sys

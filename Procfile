@@ -1,1 +1,1 @@
-web: gunicorn fitzprints.wsgi
+web: gunicorn fitzPrints.wsgi

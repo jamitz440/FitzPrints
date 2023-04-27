@@ -13,9 +13,9 @@
                         <div class="flex justify-between mt-2">
                             <span class="font-semibold text-sm"><i class="fa-solid fa-weight-scale"></i> {{ product.filament_used }}g</span>
                             <span class="font-semibold text-sm"><i class="fa-solid fa-clock"></i></i> {{ product.print_time }}hr</span>
-                            <span class="font-semibold text-sm"><i class="fa-solid fa-tag"></i> £{{ product.price }}</span>
+                            <span class="font-semibold text-sm"><i class="fa-solid fa-tag"></i> £{{ product.price }} </span>
                         </div>
-                        <a class="bg-[hsl(39deg,100%,70%)] hover:bg-[hsl(39deg,98%,50%)] text-white font-bold py-2 px-4 rounded mt-4 block w-full text-center" href="{% url 'file_detail' name=product.name %}">
+                        <a style=' background-color: rgb{{product.colour}}' class=" text-white font-bold py-2 px-4 rounded mt-4 block w-full text-center" href="{% url 'file_detail' name=product.name %}">
                             View Details
                         </a>
                     </div>

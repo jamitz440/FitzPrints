@@ -3,9 +3,31 @@
 {% block title %}FitzPrintsGB{% endblock %}
 
 {% block content %}
-    <div class="flex flex-wrap">
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
         {% for product in products %}
-            <div class=" w-1/3 p-4 min-w-[280px]">
+        <div class="w-full">
+            <div class="bg-white rounded shadow">
+                <img src="{{ product.image.url }}" alt="{{ product.name }}" class="w-full h-auto object-cover rounded-t">
+                <div class="p-4">
+                    <h3 class="text-lg font-bold truncate">{{ product.name }}</h3>
+                    <div class="flex justify-between mt-2">
+                        <span class="font-semibold text-sm"><i class="fa-solid fa-weight-scale"></i> {{ product.filament_used }}g</span>
+                        <span class="font-semibold text-sm"><i class="fa-solid fa-clock"></i></i> {{ product.print_time }}hr</span>
+                        <span class="font-semibold text-sm"><i class="fa-solid fa-tag"></i> £{{ product.price }} </span>
+                    </div>
+                    <a style=' background-color: rgb{{product.colour}}' class=" text-white font-bold py-2 px-4 rounded mt-4 block w-full text-center" href="{% url 'file_detail' name=product.name %}">
+                        View Details
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+
+    {% comment %} <div class="flex flex-wrap">
+        {% for product in products %}
+            <div class=" sm:w-1/3 p-4 min-w-[280px] w-full">
                 <div class="bg-white rounded shadow">
                     <img src="{{ product.image.url }}" alt="{{ product.name }}" class="w-full h-auto object-cover rounded-t">
                     <div class="p-4">
@@ -22,5 +44,5 @@
                 </div>
             </div>
         {% endfor %}
-    </div>
+    </div> {% endcomment %}
 {% endblock %}

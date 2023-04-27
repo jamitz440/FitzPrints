@@ -49,5 +49,8 @@ class Product(models.Model):
     
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
+        image = Image.open(self.image.path)
+        image.thumbnail((1000, 1000))
+        image.save(self.image.path)
         self.colour = self.average_color(self.image.path)
         super().save(update_fields=['colour'])

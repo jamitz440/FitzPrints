@@ -13,7 +13,7 @@ class Product(models.Model):
     print_time = models.FloatField()
     filament_used = models.FloatField()
     filament_cost = models.FloatField()
-    profit = models.FloatField()
+    profit = models.FloatField(blank=True)
     colour = models.CharField(max_length=100, blank=True)
 
     def __str__(self):
@@ -48,6 +48,7 @@ class Product(models.Model):
         return (avg_r, avg_g, avg_b)
     
     def save(self, *args, **kwargs):
+        self.profit = self.price - self.filament_cost
         super().save(*args, **kwargs)
         image = Image.open(self.image.path)
         image.thumbnail((1000, 1000))

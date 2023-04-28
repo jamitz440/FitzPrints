@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from .models import Product
+from .forms import UploadForm as Upload
 
 
 
@@ -20,3 +21,14 @@ def file_detail(request, name):
     product = Product.objects.get(name=name)
     context = { "product": product }
     return render(request, "app/file_detail.html", context)
+
+def upload(request):
+    if request.method == 'POST':
+        form = Upload(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return render(request, 'app/index.html')
+    else:
+        form = Upload()
+    return render(request, 'app/upload.html', {'form': form})
+

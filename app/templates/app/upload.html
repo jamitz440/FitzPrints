@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}Upload{% endblock %}
+
+{% block content %}
+{% load widget_tweaks %}
+
+<form action="" method="post" enctype="multipart/form-data" class="space-y-4">
+    {% csrf_token %}
+    
+    {% for field in form %}
+    <div class="flex flex-col bg-white rounded shadow mx-auto p-auto">
+        <label class="block text-gray-700 text-sm font-bold mb-2 " for="{{ field.id_for_label }}">{{ field.label }}</label>
+        {{ field|add_class:' p-5 shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline' }}
+        {% if field.errors %}
+        <ul class="text-red-500 text-xs italic">
+            {% for error in field.errors %}
+            <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    </div>
+    {% endfor %}
+    
+    <input type="submit" value="Upload" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" />
+</form>
+
+{% endblock %}

@@ -15,6 +15,7 @@ class Product(models.Model):
     filament_cost = models.FloatField()
     profit = models.FloatField(blank=True)
     colour = models.CharField(max_length=100, blank=True)
+    user = models.ForeignKey('auth.User', on_delete=models.CASCADE, blank=True , null=True)
 
     def __str__(self):
         return self.name
@@ -55,3 +56,22 @@ class Product(models.Model):
         image.save(self.image.path)
         self.colour = self.average_color(self.image.path)
         super().save(update_fields=['colour'])
+
+
+class Filament(models.Model):
+    
+    manufacturer = models.CharField(max_length=100)
+    price = models.FloatField()
+    CHOICES = (
+        ('PLA', 'PLA'),
+        ('ABS', 'ABS'),
+        ('PETG', 'PETG'),
+        ('TPU', 'TPU'),
+        ('Nylon', 'Nylon'),
+        ('ASA', 'ASA'),
+        ('PC', 'PC'),
+        ('Carbon Fibre', 'Carbon Fibre'),
+    )
+    material = models.CharField(max_length=100, choices=CHOICES)
+    type = models.CharField(max_length=100)
+    colour = models.CharField(max_length=100)

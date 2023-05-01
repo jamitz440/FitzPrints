@@ -2,12 +2,14 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from .models import Product
 from .forms import UploadForm as Upload
+from django.contrib.auth.decorators import login_required
 
 
 
 # Create your views here.
+@login_required
 def index(request):
-    products = Product.objects.all()
+    products = Product.objects.filter(user = request.user)
     context = { "products": products }
     return render(request, "app/index.html", context)
 

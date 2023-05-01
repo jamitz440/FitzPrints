@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from .models import Product
+from .models import Product, Filament
 from .forms import UploadForm as Upload
 from django.contrib.auth.decorators import login_required
 
@@ -34,3 +34,6 @@ def upload(request):
         form = Upload()
     return render(request, 'app/upload.html', {'form': form})
 
+def filament(request):
+    context = { "filaments": Filament.objects.all() }
+    return render(request, "app/filaments.html", context)

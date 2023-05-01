@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% block title %}Filaments{%endblock%}
+{% block content %}
+    <ul>
+        <div class='m-4 flex-1 rounded-md bg-white shadow-md p-6 max-w mx-auto w-3/4'>
+            <table class="table-auto w-full text-center">
+              <thead>
+                <tr>
+                    <th class="px-4 py-2">Manufacturer</th>
+                    <th class="px-4 py-2">Material</th>
+                    <th class="px-4 py-2">Type</th>
+                    <th class="px-4 py-2">Cost</th>
+                    <th class="px-4 py-2" id='colour'>Colour</th>
+                    <th class="px-4 py-2 w-min invisible" id='colour_hex'>colour</th>
+                </tr>
+              </thead>
+              {% for filament in filaments %}
+              <tbody>
+                <tr>
+                    <td>
+                        <div class=" px-4 py-2">{{filament.manufacturer}}</div>
+                    </td>
+                    <td>
+                        <div class=" px-4 py-2">{{filament.material}}</div>
+                    </td>
+                    <td>
+                        <div class=" px-4 py-2">{{filament.type}}</div>
+                    </td>
+                    <td>
+                        <div class=" px-4 py-2">£{{filament.price}}</div>
+                    </td>
+                    <td>
+                        <div class=" px-4 py-2">{{filament.colour}}</div>
+                    </td>
+                    <td>
+                        <div style='background-color:#{{filament.hex}}' class=" rounded px-4 py-[15px]"></div>
+                    </td>
+                </tr>
+            </tbody>
+                {% endfor %}
+            </table>
+          </div>
+          
+    </ul>
+
+<script>
+    $(document).ready(function(){
+        function adjust_width(){
+            var width = $('#colour').width();
+            $('#colour_hex').width(width);
+        }
+        adjust_width();
+        $(window).resize(function(){
+            adjust_width();
+        });
+    });
+</script>
+{% endblock %}

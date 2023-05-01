@@ -11,8 +11,8 @@ class Product(models.Model):
     source_link = models.CharField(max_length=1000, blank=True)
     description = models.TextField()
     print_time = models.FloatField()
-    filament_used = models.FloatField()
-    filament_cost = models.FloatField()
+    filament_used = models.ManyToManyField('Filament', blank=True)
+    cost = models.FloatField()
     profit = models.FloatField(blank=True)
     colour = models.CharField(max_length=100, blank=True)
     user = models.ForeignKey('auth.User', on_delete=models.CASCADE, blank=True , null=True)
@@ -59,7 +59,7 @@ class Product(models.Model):
 
 
 class Filament(models.Model):
-    
+
     manufacturer = models.CharField(max_length=100)
     price = models.FloatField()
     CHOICES = (
@@ -75,3 +75,12 @@ class Filament(models.Model):
     material = models.CharField(max_length=100, choices=CHOICES)
     type = models.CharField(max_length=100)
     colour = models.CharField(max_length=100)
+    hex = models.CharField(max_length=100 , blank=True)
+
+    def __str__(self):
+        return self.manufacturer + " " + self.material + " " + self.type + " " + self.colour
+
+class ProductFilament(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    filament = models.ForeignKey(Filament, on_delete=models.CASCADE)
+    grams = models.FloatField()

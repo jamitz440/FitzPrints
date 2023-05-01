@@ -15,7 +15,15 @@
 <body class="bg-gray-100 font-sans">
   <header class="flex justify-between items-center h-20 p-4">
     <div class="text-2xl">
-      
+      {% if request.user.is_authenticated %}
+        <a href="{% url 'logout' %}" class="invisible text-sm bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+          Logout
+        </a>
+      {% else %}
+        <a href="{% url 'login' %}" class=" invisible text-sm bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+          Login
+        </a>
+      {%endif%}
     </div>
     <div class="flex-grow flex justify-center">
       <a href="{% url 'index' %}">
@@ -46,4 +54,3 @@
   </footer>
 </body>
 </html>
-

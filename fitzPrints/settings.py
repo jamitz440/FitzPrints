@@ -51,6 +51,8 @@ INSTALLED_APPS = [
     'usercontroller'
 ]
 
+LOGIN_URL = 'login'
+
 TAILWIND_APP_NAME = 'theme'
 
 MIDDLEWARE = [

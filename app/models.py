@@ -11,6 +11,8 @@ class Product(models.Model):
     source_link = models.CharField(max_length=1000, blank=True)
     description = models.TextField()
     print_time = models.FloatField()
+    weight = models.FloatField()
+    filament_cost = models.FloatField()
     filament_used = models.ManyToManyField('Filament', blank=True)
     cost = models.FloatField()
     profit = models.FloatField(blank=True)

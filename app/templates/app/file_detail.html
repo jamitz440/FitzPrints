@@ -1,58 +1,106 @@
 {% extends 'base.html' %}
 
-{% block title %}{{ title }}{% endblock %}
-<style>
-    .custom-object-fit {
-        object-fit: contain;
-    }
-    </style>
+{% block title %}{{ product.name }}{% endblock %}
+
 {% block content %}
-            
+{% load widget_tweaks %}
+<form method="post">
+    {% csrf_token %}
 <div class=" rounded-lg p-6 w-full max-w mx-auto">
     <div class="flex flex-col md:flex-row items-center md:items-start h-auto">
-        <div class="w-full md:w-1/2 mb-4 md:mb-0 flex justify-center items-center overflow-hidden rounded-md h-auto bg-white shadow-md p-6 max-w mx-auto">
-            <img class="rounded-md custom-object-fit h-auto" src="{{ product.image.url }}" alt="Product Image">
+        <div class="w-full md:w-1/2 mb-4 md:mb-0 flex justify-center items-center overflow-hidden rounded-md h-auto bg-white shadow-md p-2 max-w mx-auto">
+            <img class="rounded-md h-auto" src="{{ product.image.url }}" alt="Product Image">
         </div>
-        <div class="w-full md:w-1/2 md:ml-4 flex-1 rounded-md bg-white shadow-md p-6 max-w mx-auto">
-            <h2 class="text-2xl font-bold mb-2 leading-tight">{{product.name}}</h2>
-            <p class="text-gray-600 mb-4 text-lg leading-relaxed">Price: £{{product.price}}</p>
-            <p class="text-gray-600 mb-4 text-lg leading-relaxed">Weight: {{product.filament_used}}g</p>
-            <p class="text-gray-600 mb-4 text-lg leading-relaxed">Profit: £{{product.profit}}</p>
-            <p class="text-gray-700 text-lg leading-relaxed">Description: {{product.description}}</p>
+            <div class="w-full md:w-1/2 md:ml-4 flex-1 rounded-md bg-white shadow-md p-4 max-w mx-auto">
+                <div id='fields'>
+                <p class="text-2xl font-bold mb-2 leading-tight">{{product.name}}</p>
+                <div class='flex justify-between items-center'>
+                    <p class=""><i class="fa-solid fa-tag"></i> £{{product.price}}</p>
+                    <p class=""><i class="fa-solid fa-weight-scale"></i> {{product.weight}}g</p>
+                    <p class=''> <i class="fa-solid fa-clock"></i> {{product.print_time}} hours</p>
+                </div>
+                <p class="text-gray-700 text-xlg leading-relaxed">Filaments used:</p>
+                {% for filament in product.filament_used.all %}
+                    <div class='flex justify-between'>
+                        <div>
+                            {{filament.manufacturer}}
+                            {{filament.material}}
+                            {{filament.type}}
+                            {{filament.colour}}
+                        </div>
+                        <div style='background-color:#{{filament.hex}}' class=" rounded px-4 py-[15px] w-1/6"></div>
+                    </div>
+                {% endfor %}
+                
+            </div>
+            
+        
+
+            <div id='form' style='display:none;'>
+                <label class="block text-gray-700 text-sm font-bold mb-2 " for="{{ form.name.id_for_label }}">{{ form.name.label }}:</label>
+                {{form.name|add_class:'text-2xl font-bold mb-4 p-5 shadow-sm appearance-none border-gray-200 border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline'}}
+                <label class="block text-gray-700 text-sm font-bold mb-2 " for="{{ form.price.id_for_label }}">{{ form.price.label }}:</label>
+                {{form.price|add_class:' p-5 shadow-sm appearance-none border-gray-200 border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mb-4'}}
+                <label class="block text-gray-700 text-sm font-bold mb-2 " for="{{ form.weight.id_for_label }}">{{ form.weight.label }}:</label>
+                {{form.weight|add_class:' p-5 shadow-sm appearance-none border-gray-200 border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mb-4'}}
+                <label class="block text-gray-700 text-sm font-bold mb-2 " for="{{ form.profit.id_for_label }}">{{ form.profit.label }}:</label>
+                {{form.profit|add_class:' p-5 shadow-sm appearance-none border-gray-200 border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mb-4'}}
+                <label class="block text-gray-700 text-sm font-bold mb-2 " for="{{ form.filament_used.id_for_label }}">{{ form.filament_used.label }}:</label>
+                {{form.filament_used|add_class:'mb-1'}}
+                <label class="block text-gray-700 text-sm font-bold mb-2 mt-2 " for="{{ form.description.id_for_label }}">{{ form.description.label }}:</label>
+                {{form.description|add_class:' p-5 shadow-sm appearance-none border-gray-200 border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mb-4'}}
+            </div>
+
+            {% for field in form.errors %}
+                <p class="text-red-500 text-xs italic">{{ field }}</p>
+            {% endfor %}
+
+            
+            
+            
             <div class='flex justify-between items-center mt-6'>
-                <a class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-4"  href='{{product.etsy_link}}'>
-                    Etsy
-                </a> 
-                <a class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                    Source
-                </a> 
+                <a id='edit_button' style='' class="text-cyan-700 hover:text-cyan-800 font-bold py-2 px-4 rounded cursor-pointer">
+                    Edit
+                </a>
+                <a id='cancel_button' style='display:none;' class='text-cyan-700 hover:text-cyan-800 font-bold py-2 px-4 rounded cursor-pointer' >
+                    Cancel
+                </a>
+                <button type='submit' id='save_button' style='display:none;' class="bg-cyan-700 hover:bg-cyan-800 text-white font-bold py-2 px-4 rounded cursor-pointer"  >
+                    Save
+                </button>
+                
+                                
             </div>
         </div>
     </div>
 </div>
+</form>
+
+<script>
+    const edit_button = document.getElementById('edit_button');
+    const cancel_button = document.getElementById('cancel_button');
+    const save_button = document.getElementById('save_button');
+    const fields = document.getElementById('fields');
+    const form = document.getElementById('form');
+
+    edit_button.addEventListener('click', () => {
+        edit_button.style.display = 'none';
+        cancel_button.style.display = '';
+        save_button.style.display = '';
+        fields.style.display = 'none';
+        form.style.display = '';
+        
+    });
+
+    cancel_button.addEventListener('click', () => {
+        edit_button.style.display = '';
+        cancel_button.style.display = 'none';
+        save_button.style.display = 'none';
+        fields.style.display = '';
+        form.style.display = 'none';
+    });
 
 
-    {% comment %} <div class="bg-white rounded-lg shadow-md p-6 w-full max-w mx-auto">
-        <div class="flex flex-col md:flex-row items-center md:items-start">
-            <div class="w-full md:w-1/3 mb-4 md:mb-0 flex justify-center items-center h-48 overflow-hidden rounded-md">
-                <img class="rounded-md custom-object-fit" src="{{ product.image.url }}" alt="Product Image">
-            </div>
-            <div class="w-full md:w-2/3 md:ml-4">
-            <h2 class="text-xl font-bold mb-2">{{product.name}}</h2>
-            <p class="text-gray-600 mb-4">Price: £{{product.price}}</p>
-            <p class="text-gray-600 mb-4">Weight: {{product.filament_used}}g</p>
-            <p class="text-gray-600 mb-4">Profit: £{{product.profit}}</p>
-            <p class="text-gray-700">Description: {{product.description}}</p>
-            <div class='flex justify-between items-center mt-5 '>
-            <a class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-auto"  href='{{product.etsy_link}}'>
-                Etsy
-            </a> 
-            <a class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-auto">
-                Source
-            </a> 
-        </div>
-        </div>
-        </div>
-        </div> {% endcomment %}
+</script>
           
 {% endblock %}

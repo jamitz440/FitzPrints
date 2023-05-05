@@ -1,7 +1,7 @@
 from django.shortcuts import render , redirect, get_object_or_404, reverse
 from django.http import HttpResponse
 from .models import Product, Filament
-from .forms import UploadForm as Upload, UpdateForm as Update
+from .forms import UploadForm as Upload, UpdateForm as Update, fileUploadForm as fileUpload
 
 from django.contrib.auth.decorators import login_required
 
@@ -39,7 +39,7 @@ def file_detail(request, name):
 
     product = Product.objects.get(name=name)
     if request.method == 'POST':
-        form = Update(request.POST, instance=product)
+        form = Update(request.POST, instance=product, files=request.FILES)
         if form.is_valid():
             form.save()
             return redirect('app:file_detail', name=product.name)

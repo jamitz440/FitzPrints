@@ -1,5 +1,7 @@
 from django.db import models
+from django.core.validators import FileExtensionValidator
 from PIL import Image
+import os
 
 # Create your models here.
 
@@ -18,6 +20,7 @@ class Product(models.Model):
     profit = models.FloatField(blank=True)
     colour = models.CharField(max_length=100, blank=True)
     user = models.ForeignKey('auth.User', on_delete=models.CASCADE, blank=True , null=True)
+    file = models.FileField(upload_to='files/', validators=[FileExtensionValidator(allowed_extensions=['zip'])], blank=True, null=True)
 
     def __str__(self):
         return self.name
@@ -86,3 +89,15 @@ class ProductFilament(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     filament = models.ForeignKey(Filament, on_delete=models.CASCADE)
     grams = models.FloatField()
+
+
+class File(models.Model):
+    file = models.FileField(upload_to='files/', validators=[FileExtensionValidator(allowed_extensions=['zip'])])
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='files', blank=True, null=True)
+    
+
+    def delete(self, *args, **kwargs):
+        # Delete the file from the file system
+        if os.path.isfile(self.file.path):
+            os.remove(self.file.path)
+        super().delete(*args, **kwargs)

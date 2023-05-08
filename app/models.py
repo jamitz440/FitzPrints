@@ -83,7 +83,7 @@ class Filament(models.Model):
     hex = models.CharField(max_length=100 , blank=True)
 
     def __str__(self):
-        return self.manufacturer + " " + self.material + " " + self.type + " " + self.colour
+        return self.manufacturer + " " + self.material + " " + self.type + " " + self.colour + " " + self.hex
 
 class ProductFilament(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)

@@ -105,14 +105,24 @@ WSGI_APPLICATION = 'fitzPrints.wsgi.application'
 #         'NAME': BASE_DIR / 'db.sqlite3',
 #     }
 # }
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'fitzprints',
+#         'USER': 'postgres',
+#         'PASSWORD': 'Ch3ese=5',
+#         'HOST': '64.176.178.204',
+#         'PORT': '5432',
+#     }
+# }
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'fitzprints',
+        'NAME': 'railway',
         'USER': 'postgres',
-        'PASSWORD': 'Ch3ese=5',
-        'HOST': '64.176.178.204',
-        'PORT': '5432',
+        'PASSWORD': 'WuhMsytTPx6MHZHOHPnE',
+        'HOST': 'containers-us-west-169.railway.app',
+        'PORT': '6458',
     }
 }
 
@@ -153,7 +163,7 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+
 STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'

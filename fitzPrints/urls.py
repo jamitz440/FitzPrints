@@ -24,6 +24,7 @@ urlpatterns = [
     path("", include("app.urls", namespace="app")),
     path("__reload__/", include("django_browser_reload.urls")),
     path("", include("usercontroller.urls")),
+    path('__debug__/', include('debug_toolbar.urls')),
     
 ] 
 

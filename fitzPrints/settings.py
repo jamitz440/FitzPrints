@@ -48,7 +48,8 @@ INSTALLED_APPS = [
     'theme',
     'django_browser_reload',
     'app',
-    'usercontroller'
+    'usercontroller',
+    'debug_toolbar',
 ]
 
 LOGIN_URL = 'login'
@@ -65,6 +66,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     "django_browser_reload.middleware.BrowserReloadMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 CSRF_TRUSTED_ORIGINS = [
@@ -99,32 +101,32 @@ WSGI_APPLICATION = 'fitzPrints.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
 # DATABASES = {
 #     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'railway',
+#         'USER': 'postgres',
+#         'PASSWORD': 'LmU28VoB1EwsbQZeEd0Z',
+#         'HOST': 'containers-us-west-172.railway.app',
+#         'PORT': '5785',
 #     }
 # }
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': 'fitzprints',
-#         'USER': 'postgres',
-#         'PASSWORD': 'Ch3ese=5',
-#         'HOST': '64.176.178.204',
-#         'PORT': '5432',
+#         'NAME': os.getenv('PGDATABASE'),
+#         'USER': os.getenv('PGUSER'),
+#         'PASSWORD': os.getenv('PGPASSWORD'),
+#         'HOST': os.getenv('PGHOST'),
+#         'PORT': os.getenv('PGPORT'),
 #     }
 # }
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': os.environ["PGDATABASE"],
-        'USER': os.environ["PGUSER"],
-        'PASSWORD': os.environ["PGPASSWORD"],
-        'HOST': os.environ["PGHOST"],
-        'PORT': os.environ["PGPORT"],
-    }
-}
 
 Gunicorn = {
     'timeout': 60,

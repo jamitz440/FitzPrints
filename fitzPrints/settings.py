@@ -67,6 +67,9 @@ MIDDLEWARE = [
     "whitenoise.middleware.WhiteNoiseMiddleware",
 ]
 
+CSRF_TRUSTED_ORIGINS = [
+    'https://web-production-02d3.up.railway.app/'
+]
 
 ROOT_URLCONF = 'fitzPrints.urls'
 
@@ -113,8 +116,9 @@ DATABASES = {
     }
 }
 
-db_from_env = dj_database_url.config(conn_max_age=500)
-DATABASES['default'].update(db_from_env)
+Gunicorn = {
+    'timeout': 60,
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators

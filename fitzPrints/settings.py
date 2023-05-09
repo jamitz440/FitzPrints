@@ -118,11 +118,11 @@ WSGI_APPLICATION = 'fitzPrints.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'railway',
-        'USER': 'postgres',
-        'PASSWORD': 'LmU28VoB1EwsbQZeEd0Z',
-        'HOST': 'containers-us-west-172.railway.app',
-        'PORT': '5785',
+        'NAME': os.getenv('PGDATABASE'),
+        'USER': os.getenv('PGUSER'),
+        'PASSWORD': os.getenv('PGPASSWORD'),
+        'HOST': os.getenv('PGHOST'),
+        'PORT': os.getenv('PGPORT'),
     }
 }
 

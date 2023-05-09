@@ -70,7 +70,7 @@ MIDDLEWARE = [
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    'https://web-production-02d3.up.railway.app/'
+    'https://fitzprints.up.railway.app/'
 ]
 
 ROOT_URLCONF = 'fitzPrints.urls'

@@ -17,7 +17,7 @@ from django.core.management.utils import get_random_secret_key
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 env = environ.Env()
 environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
@@ -32,7 +32,7 @@ SECRET_KEY = env('SECRET_KEY', default=get_random_secret_key())
 APP_ENV = env('APP_ENV', default='dev')
 
 # Get app debug mode from .env file or set to True
-DEBUG = env('DEBUG', default=True)
+DEBUG = env('DEBUG', default="True") in ['True', 'true', '1']
 
 # Get allowed hosts from .env file or set to all
 ALLOWED_HOSTS = env('ALLOWED_HOSTS', default='*').split(',')  # Get allowed hosts from .env file or set to all
@@ -116,7 +116,9 @@ TEMPLATES = [
 WSGI_APPLICATION = 'fitzPrints.wsgi.application'
 
 
-USE_SQLITE = env('USE_SQLITE', default=False).lower() in ['true', '1', 't']
+USE_SQLITE = env('USE_SQLITE', default="True")
+
+USE_SQLITE = str(USE_SQLITE).lower() in ['true', '1']
 
 if USE_SQLITE:
     DATABASES = {

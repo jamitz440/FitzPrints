@@ -10,43 +10,37 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
-from pathlib import Path
 import os
-import environ
+from pathlib import Path
 from django.core.management.utils import get_random_secret_key
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
-
-env = environ.Env()
-environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
-
 # Get file upload max memory size from .env file or set to 5MB
-FILE_UPLOAD_MAX_MEMORY_SIZE = env('FILE_UPLOAD_MAX_MEMORY_SIZE', default=5242880)
+FILE_UPLOAD_MAX_MEMORY_SIZE = os.getenv('FILE_UPLOAD_MAX_MEMORY_SIZE', "5242880")
 
 # Get secret key from .env file or generate one
-SECRET_KEY = env('SECRET_KEY', default=get_random_secret_key())
+SECRET_KEY = os.getenv('SECRET_KEY', get_random_secret_key())
 
 # Get app environment from .env file or set to dev
-APP_ENV = env('APP_ENV', default='dev')
-
+APP_ENV = os.getenv('APP_ENV', "dev")
 # Get app debug mode from .env file or set to True
-DEBUG = env('DEBUG', default="True") in ['True', 'true', '1']
+DEBUG = os.getenv('DEBUG', "True").lower() in ['True', 'true', '1']
 
 # Get allowed hosts from .env file or set to all
-ALLOWED_HOSTS = env('ALLOWED_HOSTS', default='*').split(',')  # Get allowed hosts from .env file or set to all
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', default='*').split(',')  # Get allowed hosts from .env file or set to all
 
 
 if DEBUG:
     CORS_ORIGIN_ALLOW_ALL = True
 else:
     # Allow CSRF from all hosts or hosts specified in .env file
-    CSRF_TRUSTED_ORIGINS = env("CSRF_TRUSTED_ORIGINS", "http://localhost").split(
+    CSRF_TRUSTED_ORIGINS = os.getenv("CSRF_TRUSTED_ORIGINS", "http://localhost").split(
         ","
     )
     # Allow CORS from all hosts or hosts specified in .env file
-    CORS_ALLOWED_ORIGINS = env("CORS_ALLOWED_ORIGINS", "http://localhost").split(
+    CORS_ALLOWED_ORIGINS = os.getenv("CORS_ALLOWED_ORIGINS", "http://localhost").split(
         ","
     )
 
@@ -116,9 +110,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'fitzPrints.wsgi.application'
 
 
-USE_SQLITE = env('USE_SQLITE', default="True")
-
-USE_SQLITE = str(USE_SQLITE).lower() in ['true', '1']
+USE_SQLITE = os.getenv('USE_SQLITE', "True") in ('True', 'true', '1')
 
 if USE_SQLITE:
     DATABASES = {
@@ -139,9 +131,9 @@ else:
         }
     }
 
-Gunicorn = {
-    'timeout': 60,
-}
+# Gunicorn = {
+#     'timeout': 60,
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators

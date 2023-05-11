@@ -10,41 +10,32 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
-import os
 from pathlib import Path
-from django.core.management.utils import get_random_secret_key
-
+import dj_database_url
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent.parent
-# Get file upload max memory size from .env file or set to 5MB
-FILE_UPLOAD_MAX_MEMORY_SIZE = os.getenv('FILE_UPLOAD_MAX_MEMORY_SIZE', "5242880")
+BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Get secret key from .env file or generate one
-SECRET_KEY = os.getenv('SECRET_KEY', get_random_secret_key())
+FILE_UPLOAD_MAX_MEMORY_SIZE = 10485760
 
-# Get app environment from .env file or set to dev
-APP_ENV = os.getenv('APP_ENV', "dev")
-# Get app debug mode from .env file or set to True
-DEBUG = os.getenv('DEBUG', "True").lower() in ['True', 'true', '1']
+# Quick-start development settings - unsuitable for production
+# See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
-# Get allowed hosts from .env file or set to all
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', default='*').split(',')  # Get allowed hosts from .env file or set to all
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = 'django-insecure-+e&h19#k(y6t^7r+(b7@fe+2uf^)*u0h%$_gozslxj3oaw7qpb'
 
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = True
 
-if DEBUG:
-    CORS_ORIGIN_ALLOW_ALL = True
-else:
-    # Allow CSRF from all hosts or hosts specified in .env file
-    CSRF_TRUSTED_ORIGINS = os.getenv("CSRF_TRUSTED_ORIGINS", "http://localhost").split(
-        ","
-    )
-    # Allow CORS from all hosts or hosts specified in .env file
-    CORS_ALLOWED_ORIGINS = os.getenv("CORS_ALLOWED_ORIGINS", "http://localhost").split(
-        ","
-    )
+ALLOWED_HOSTS = ['*']
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 
 # Application definition
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -52,7 +43,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'corsheaders',
     'widget_tweaks',
     'tailwind',
     'theme',
@@ -70,7 +60,6 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     "whitenoise.middleware.WhiteNoiseMiddleware",
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'corsheaders.middleware.CorsMiddleware',  # CorsMiddleware should be placed as high as possible,
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -78,6 +67,10 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     "django_browser_reload.middleware.BrowserReloadMiddleware",
     'debug_toolbar.middleware.DebugToolbarMiddleware',
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://fitzprints.up.railway.app/'
 ]
 
 ROOT_URLCONF = 'fitzPrints.urls'
@@ -89,12 +82,7 @@ INTERNAL_IPS = [
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [
-            os.path.join(BASE_DIR, '/theme/templates'),
-            os.path.join(BASE_DIR, '/app/templates'),
-            os.path.join(BASE_DIR, '/usercontroller/templates'),
-            os.path.join(BASE_DIR, '/usercontroller/templates'),
-        ],
+        'DIRS': [os.path.join(BASE_DIR, 'your_app_name/templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -109,49 +97,31 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'fitzPrints.wsgi.application'
 
-CACHES = {
+
+# Database
+# https://docs.djangoproject.com/en/4.2/ref/settings/#databases
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+
+DATABASES = {
     'default': {
-        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
-        'LOCATION': '/var/tmp/django_cache',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': os.getenv('PGDATABASE'),
+        'USER': os.getenv('PGUSER'),
+        'PASSWORD': os.getenv('PGPASSWORD'),
+        'HOST': os.getenv('PGHOST'),
+        'PORT': os.getenv('PGPORT'),
     }
 }
 
-
-USE_SQLITE = os.getenv('USE_SQLITE', "True")
-
-if USE_SQLITE in ('True', 'true', '1'):
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': 'db.sqlite3',
-        }
-    }
-elif APP_ENV == 'prod':
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql',
-            'NAME': os.getenv('PGDATABASE'),
-            'USER': os.getenv('PGUSER'),
-            'PASSWORD': os.getenv('PGPASSWORD'),
-            'HOST': os.getenv('PGHOST'),
-            'PORT': os.getenv('PGPORT'),
-        }
-    }
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': 'railway',
-            'USER': 'postgres',
-            'PASSWORD': 'LmU28VoB1EwsbQZeEd0Z',
-            'HOST': 'containers-us-west-172.railway.app',
-            'PORT': '5785',
-        }
-    }
-
-# Gunicorn = {
-#     'timeout': 60,
-# }
+Gunicorn = {
+    'timeout': 60,
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -171,6 +141,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
@@ -182,13 +153,13 @@ USE_I18N = True
 
 USE_TZ = True
 
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
@@ -196,3 +167,4 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+ALLOWED_HOSTS = ['*']

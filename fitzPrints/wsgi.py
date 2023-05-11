@@ -1,11 +1,16 @@
+"""
+WSGI config for fitzPrints project.
+
+It exposes the WSGI callable as a module-level variable named ``application``.
+
+For more information on this file, see
+https://docs.djangoproject.com/en/4.2/howto/deployment/wsgi/
+"""
+
 import os
-import dotenv
+
 from django.core.wsgi import get_wsgi_application
 
-dotenv_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), '.env')
-dotenv.load_dotenv(dotenv_path)
-
-APP_ENV = os.getenv("APP_ENV", "dev")
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', f'fitzPrints.settings.{APP_ENV}')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'fitzPrints.settings')
 
 application = get_wsgi_application()

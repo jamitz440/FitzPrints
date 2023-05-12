@@ -10,9 +10,14 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
+import sentry_sdk
 from pathlib import Path
 import dj_database_url
 import os
+from sentry_sdk.integrations.django import DjangoIntegration
+import dotenv
+
+dotenv.load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -34,6 +39,23 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
+sentry_sdk.init(
+    dsn="https://8b91ae40954b4147b43c2019dfa09ea8@o4505169964564480.ingest.sentry.io/4505169965416448",
+    integrations=[
+        DjangoIntegration(),
+    ],
+
+    # Set traces_sample_rate to 1.0 to capture 100%
+    # of transactions for performance monitoring.
+    # We recommend adjusting this value in production.
+    traces_sample_rate=1.0,
+
+    # If you wish to associate users to errors (assuming you are using
+    # django.contrib.auth) you may enable sending PII data.
+    send_default_pii=True
+)
+
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -46,10 +68,10 @@ INSTALLED_APPS = [
     'widget_tweaks',
     'tailwind',
     'theme',
-    'django_browser_reload',
+    # 'django_browser_reload',
     'app',
     'usercontroller',
-    'debug_toolbar',
+    # 'debug_toolbar',
 ]
 
 LOGIN_URL = 'login'
@@ -65,12 +87,13 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    "django_browser_reload.middleware.BrowserReloadMiddleware",
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
+    # "django_browser_reload.middleware.BrowserReloadMiddleware",
+    # 'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    'https://fitzprints.up.railway.app/'
+    'https://fitzprints.up.railway.app/',
+    
 ]
 
 ROOT_URLCONF = 'fitzPrints.urls'
@@ -108,14 +131,24 @@ WSGI_APPLICATION = 'fitzPrints.wsgi.application'
 #     }
 # }
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': os.getenv('PGDATABASE'),
+#         'USER': os.getenv('PGUSER'),
+#         'PASSWORD': os.getenv('PGPASSWORD'),
+#         'HOST': os.getenv('PGHOST'),
+#         'PORT': os.getenv('PGPORT'),
+#     }
+# }
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': os.getenv('PGDATABASE'),
-        'USER': os.getenv('PGUSER'),
-        'PASSWORD': os.getenv('PGPASSWORD'),
-        'HOST': os.getenv('PGHOST'),
-        'PORT': os.getenv('PGPORT'),
+        'NAME': 'railway',
+        'USER': 'postgres',
+        'PASSWORD': 'LmU28VoB1EwsbQZeEd0Z',
+        'HOST': 'containers-us-west-172.railway.app',
+        'PORT': '5785',
     }
 }
 
